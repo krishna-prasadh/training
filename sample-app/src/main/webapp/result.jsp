@@ -3,6 +3,10 @@
 <!DOCTYPE html>
 <html>
 <body>
+<form action="login" method="post">
+	<input type="hidden" name="logout">
+	<input type="submit" value="logout">
+	</form>
 <center>
 <h1>
     We have
