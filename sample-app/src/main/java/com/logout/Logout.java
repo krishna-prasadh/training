@@ -23,6 +23,18 @@ public class Logout extends HttpServlet {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	protected void service(HttpServletRequest req, HttpServletResponse resp)
+		    throws ServletException, IOException
+		{
+			System.out.println("IN SERVICE METHOD NOW");
+			MyCookie mc = new MyCookie();
+			mc.deleteCookie(req, resp);
+			RequestDispatcher rdp = req.getRequestDispatcher("index.html");
+			rdp.forward(req, resp);
+		}
+	
+	
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -31,10 +43,6 @@ public class Logout extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		MyCookie mc = new MyCookie();
-		mc.deleteCookie(req, res);
-		RequestDispatcher rdp = req.getRequestDispatcher("index.html");
-		rdp.forward(req, res);
 
 	}
 
@@ -45,12 +53,6 @@ public class Logout extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-
-		MyCookie mc = new MyCookie();
-		mc.deleteCookie(req, res);
-		//res.sendRedirect("");
-		RequestDispatcher rdp = req.getRequestDispatcher("index.html");
-		rdp.forward(req, res);
 
 	}
 

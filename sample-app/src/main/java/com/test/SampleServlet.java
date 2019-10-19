@@ -35,7 +35,7 @@ public class SampleServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.sendRedirect("home");
+		response.sendRedirect("/home");
 //		RequestDispatcher rdp = request.getRequestDispatcher("index.jsp"); 
 //		  rdp.forward(request, response);
 	}
@@ -50,22 +50,24 @@ public class SampleServlet extends HttpServlet {
 		
 		
 		
-		 String typ = request.getParameter("Type");
+		 String requestType = request.getParameter("Type");
 		 
-		 if(typ==null) {
+		 if(requestType==null) {
 			 
-			 RequestDispatcher rdp = request.getRequestDispatcher("index.jsp"); 
-			  rdp.forward(request, response);
+			 response.sendRedirect("/home");
+			// RequestDispatcher rdp = request.getRequestDispatcher("index.jsp"); 
+			 // rdp.forward(request, response);
 			 
 		 }
 		 else {
 			 SampleService ser = new SampleService();
-			  List items=ser.getItems(typ);
+			  List items=ser.getItems(requestType);
 			  
-			  System.out.print(typ);
 			  
-			  request.setAttribute("type", items);
-			  RequestDispatcher rdp = request.getRequestDispatcher("result.jsp"); 
+			  request.setAttribute("type",items);
+			 // response.sendRedirect("/result.jsp");
+			  
+			  RequestDispatcher rdp = request.getRequestDispatcher("/result.jsp"); 
 			  rdp.forward(request, response);
 			 
 		 }

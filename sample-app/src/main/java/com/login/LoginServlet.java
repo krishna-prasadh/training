@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,13 +35,13 @@ public class LoginServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		MyCookie mc = new MyCookie();
 
-		boolean lout=mc.getCookiee(request);
+		Cookie localCookie=mc.getCookieeByName(request,"training");
 		
 //		this.redirect(lout, request, response);
-		if (!lout) {
-			//response.sendRedirect("login");
-			RequestDispatcher rdp = request.getRequestDispatcher("index.html");
-			rdp.forward(request, response);
+		if (localCookie == null) {
+			response.sendRedirect("/login");
+			//RequestDispatcher rdp = request.getRequestDispatcher("index.html");
+		//	rdp.forward(request, response);
 		} else {
 			RequestDispatcher rdp = request.getRequestDispatcher("index.jsp");
 			rdp.forward(request, response);
@@ -53,7 +54,7 @@ public class LoginServlet extends HttpServlet {
 	
 	public void redirect(boolean valid,HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		if (!valid) {
-			res.sendRedirect("login");
+			//res.sendRedirect("login");
 			RequestDispatcher rdp = req.getRequestDispatcher("index.html");
 			rdp.forward(req, res);
 		} else {
@@ -87,6 +88,7 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			valid = mc.getCookiee(req);
 		}
+		System.out.print("cookie "+valid);
 		this.redirect(valid, req, res);
 		
 

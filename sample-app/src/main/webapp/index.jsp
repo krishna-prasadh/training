@@ -6,7 +6,7 @@
     <title>Sample</title>
 </head>
 <body>
-	<form action="login" method="post">
+	<form action="/login" method="post">
 	<input type="hidden" name="logout">
 	<input type="submit" value="logout">
 	</form>
@@ -15,7 +15,7 @@
     <h1>
         Select a type 
     </h1>
-    <form method="post" action="result">
+    <form method="post" action="app/result">
        <br>
         <select name="Type" size="1">
             <option>Fruits</option>

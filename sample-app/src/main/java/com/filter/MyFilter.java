@@ -29,20 +29,26 @@ public class MyFilter implements Filter {
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
-	public void doFilter(ServletRequest request, ServletResponse response,
-			FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		// place your code here
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		MyCookie mc = new MyCookie();
-		Cookie cokk = mc.getCookieeByName(req, "training");
-		System.out.print(" filter redaing  " + cokk);
+		Cookie browserCookie = mc.getCookieeByName(req, "training");
 
-		if (cokk == null) {
-			res.sendRedirect("http://localhost:8080/login");
+		if (browserCookie == null) {
+			// System.out.print();req.getRequestURI().toString().equals("login")
+			
+			if (req.getServletPath().equals("/login") ||(req.getParameter("user_name")!= null && req.getParameter("password") != null && req.getServletPath().equals("/home")) ) {
+				chain.doFilter(request, response);
+			} else
+				res.sendRedirect("http://localhost:8080/login");
+
 		} else {
+			
 			chain.doFilter(request, response);
 		}
 	}

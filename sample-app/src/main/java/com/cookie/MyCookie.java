@@ -45,20 +45,26 @@ public class MyCookie {
 
 	}
 
-	public void deleteCookie(HttpServletRequest req,
-			HttpServletResponse response) throws ServletException, IOException {
+	public void deleteCookie(HttpServletRequest req, HttpServletResponse response)
+			throws ServletException, IOException {
 
-		Cookie[] cookies = req.getCookies();
-		if (cookies != null) {
-			for (int i = 0; i < cookies.length; i++) {
-				if (cookies[i].getName().equals("training")) {
-					cookies[i].setMaxAge(0);
-					response.addCookie(cookies[i]);
-				}
-			}
+		Cookie ourCookie = this.getCookieeByName(req, "training");
+		System.out.println("ourCookie " + ourCookie);
+		if (ourCookie != null) {
+			ourCookie.setMaxAge(0);
+			response.addCookie(ourCookie);
+
 		}
-		RequestDispatcher rdp = req.getRequestDispatcher("index.html");
-		rdp.forward(req, response);
+		
+		// Cookie[] cookies = req.getCookies();
+//		if (cookies != null) {
+//			for (int i = 0; i < cookies.length; i++) {
+//				if (cookies[i].getName().equals("training")) {
+//					cookies[i].setMaxAge(0);
+//					response.addCookie(cookies[i]);
+//				}
+//			}
+//		}
 
 	}
 }
