@@ -35,20 +35,21 @@ public class MyFilter implements Filter {
 		// place your code here
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-
+		System.out.println("url is --" + req.getServletPath());
 		MyCookie mc = new MyCookie();
 		Cookie browserCookie = mc.getCookieeByName(req, "training");
 
 		if (browserCookie == null) {
 			// System.out.print();req.getRequestURI().toString().equals("login")
-			
-			if (req.getServletPath().equals("/login") ||(req.getParameter("user_name")!= null && req.getParameter("password") != null && req.getServletPath().equals("/home")) ) {
+
+			if (req.getServletPath().equals("/login") ||req.getServletPath().equals("/validations.js") || req.getServletPath().equals("/adduser/error") ||req.getServletPath().equals("/app/adduser") || (req.getParameter("user_name") != null
+					&& req.getParameter("password") != null && req.getServletPath().equals("/home"))) {
 				chain.doFilter(request, response);
 			} else
 				res.sendRedirect("http://localhost:8080/login");
 
 		} else {
-			
+
 			chain.doFilter(request, response);
 		}
 	}

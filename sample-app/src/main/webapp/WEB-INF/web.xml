@@ -22,6 +22,15 @@
 		<servlet-name>SampleServlet</servlet-name>
 		<url-pattern>/app/result</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>erorjsp</servlet-name>
+		<jsp-file>/error.jsp</jsp-file>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>erorjsp</servlet-name>
+		<url-pattern>/adduser/error</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>LoginServlet</servlet-name>
@@ -37,10 +46,21 @@
 		<servlet-name>Logout</servlet-name>
 		<servlet-class>com.logout.Logout</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Adduser</display-name>
+		<servlet-name>Adduser</servlet-name>
+		<servlet-class>com.adduser.Adduser</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>Logout</servlet-name>
 		<url-pattern>/login</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Adduser</servlet-name>
+		<url-pattern>/app/adduser</url-pattern>
 	</servlet-mapping>
 
 </web-app>
