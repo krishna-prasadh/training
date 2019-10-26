@@ -26,7 +26,7 @@
 		<servlet-name>erorjsp</servlet-name>
 		<jsp-file>/error.jsp</jsp-file>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>erorjsp</servlet-name>
 		<url-pattern>/adduser/error</url-pattern>
