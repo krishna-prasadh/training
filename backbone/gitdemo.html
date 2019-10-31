@@ -1,0 +1,258 @@
+<html>
+
+<head>
+
+    <title>Backbone.Form example</title>
+
+    <!-- backbone.js -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" type="text/javascript">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.3/backbone-min.js" type="text/javascript">
+    </script>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.0/backbone.localStorage-min.js"
+        type="text/javascript"></script>
+
+    <!-- backbone form -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone-forms/0.14.1/backbone-forms.min.js"></script>
+    <!-- bootstart -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+    <div class="d-flex">
+        <div class="vertical-menu mr-5">
+            <a class="nav-link active" href="#dkim-spf">DKIM & SPF</a>
+            <a class="nav-link" href="#branded-emails">Branded emails</a>
+            <a class="nav-link" href="#free-emails">Free emails</a>
+            <a class="nav-link" href="#datasync">Datasync</a>
+            <a class="nav-link" href="#activites">Activites</a>
+        </div>
+        <div id="container" class="container"></div>
+        <!-- <button type="submit">submit</button> -->
+    </div>
+
+    <script id="EmailformTemplate" type="text/html">
+        <form>
+            <div data-fields="email,Domainname"></div>
+            <input type="submit" class="btn btn-primary submit" />
+        </form>
+    </script>
+    <script id="Domainformtemplate" type="text/html">
+        <form>
+            <div data-fields="Domainname"></div>
+            <input type="submit" class="btn btn-primary submit" />
+        </form>
+    </script>
+
+</body>
+
+</html>
+<script>
+    function form_submit(event) {
+        event.preventDefault();
+        
+        alert("now");
+        debugger;
+        // alert("submoit function");
+        // console.log("form data is ", e);
+        // var email=document.getElementById('')
+        var url = `http://localhost:8080/rest/${window.filter}`;
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            //  headers: {  'Access-Control-Allow-Origin': '*' },
+            success: appendTable,
+            error: function (err) {
+                alert("failure");
+                console.log(err);
+
+            }
+        });
+    }
+
+    function appendTable(data) {
+        var html = window.filter == 'dkim-spf' ? "<table> <tr> <th>Email</th>   <th>Domain</th>   </tr>  " :
+            "<table> <tr> <th>#</th>   <th>Domain</th>   </tr>  ";
+        data.forEach((item, index) => {
+            // console.log("item is " ,item);
+            var row = row = `<tr> <td>${index}</td> <td>${item.domainName}</td> </tr>`;
+            if (Window.filter == 'dkim-spf') {
+                row = `<tr> <td>${item.email}</td> <td>${item.domainName}</td> </tr>`;
+
+            }
+            console.log(row);
+            html = html + row;
+        });
+        html = html + '<table>';
+        console.log("html ", html);
+        $('#table').html(html);
+
+
+    }
+
+
+    $(function () {
+
+        $('.nav-link').on('click', function () {
+            $('.nav-link').removeClass('active');
+            $(this).addClass('active');
+        });
+
+
+        function render_from(param, template) {
+            //Extend Backbone.Form and customise, set schema
+
+            var form_obj = new model(param);
+
+
+            //alert(JSON.stringify(param));
+            var RegisterForm = Backbone.Form.extend({
+
+                template: _.template($('#' + template).html()),
+                model: form_obj
+            });
+
+
+            var form = new RegisterForm(form_obj).render();
+            $('#container').html('');
+            $('#container').append(form.el);
+
+
+            //Run validation before submitting
+            form.on('submit', function (event) {
+                debugger;
+                var errs = form.validate();
+                errs ? event.preventDefault() : form_submit(event);
+
+                //  alert(errs);
+
+
+            });
+
+        }
+
+
+
+
+
+        var Email_form = {
+            email: {
+                editorClass: 'form-control',
+                fieldClass: 'form-group',
+                validators: ['required', 'email']
+            },
+            Domainname: {
+                type: 'Text',
+                editorClass: 'form-control',
+                fieldClass: 'form-group',
+                validators: ['required']
+
+            }
+        };
+        var Domain_form = {
+
+            Domainname: {
+                type: 'Text',
+                editorClass: 'form-control',
+                fieldClass: 'form-group',
+                validators: ['required']
+            }
+        }
+
+        var model = Backbone.Model.extend({
+            schema: {},
+            initialize: function (a) {
+                console.log("schema is ", this.schema);
+                this.schema = a;
+            },
+
+        });
+
+        //Create the form instance and add to the page
+        render_from(Email_form, 'EmailformTemplate');
+
+        Router = Backbone.Router.extend({
+            routes: {
+                '*filter': 'setFiter'
+            },
+            setFiter: function (params) {
+                console.log("params are ", params.trim())
+                window.filter = params.trim();
+                var param = Domain_form;
+                var temp = 'Domainformtemplate'
+                switch (window.filter) {
+
+                    case 'dkim-spf':
+                        param = Email_form;
+                        temp = 'EmailformTemplate'
+                        break;
+                    case 'branded-emails':
+
+                        break;
+                    case 'free-emails':
+
+
+                        break;
+                    case 'activites':
+                        break;
+                    case 'datasync':
+
+                        break;
+                    default:
+
+                        break;
+                }
+
+
+                render_from(param, temp);
+                //  appview.form_render();
+            }
+
+        });
+        var router = new Router()
+        Backbone.history.start();
+
+    });
+</script>
+<style>
+    div[data-error] {
+        color: red;
+    }
+
+    vertical-menu {
+        width: 200px;
+        /* Set a width if you like */
+    }
+
+    .vertical-menu a {
+        background-color: #eee;
+        /* Grey background color */
+        color: black;
+        /* Black text color */
+        display: block;
+        /* Make the links appear below each other */
+        padding: 12px;
+        /* Add some padding */
+        text-decoration: none;
+        /* Remove underline from links */
+    }
+
+    .vertical-menu a:hover {
+        background-color: #ccc;
+        /* Dark grey background on mouse-over */
+    }
+
+    .vertical-menu a.active {
+        background-color: rgb(26, 12, 32);
+        /* Add a green color to the "active/current" link */
+        color: white;
+    }
+</style>
